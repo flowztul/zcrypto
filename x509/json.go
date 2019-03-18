@@ -428,7 +428,7 @@ type JSONCertificate struct {
 	Redacted                  bool                         `json:"redacted"`
 }
 
-func (c *Certificate) MarshalJSON() ([]byte, error) {
+func (c *Certificate) JSONCertificate() (*JSONCertificate) {
 	// Fill out the certificate
 	jc := new(JSONCertificate)
 	jc.Version = c.Version
@@ -496,7 +496,11 @@ func (c *Certificate) MarshalJSON() ([]byte, error) {
 	jc.TBSCertificateFingerprint = c.TBSCertificateFingerprint
 	jc.ValidationLevel = c.ValidationLevel
 
-	return json.Marshal(jc)
+	return jc
+}
+
+func (c *Certificate) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.JSONCertificate())
 }
 
 // UnmarshalJSON - intentionally implimented to always error,
